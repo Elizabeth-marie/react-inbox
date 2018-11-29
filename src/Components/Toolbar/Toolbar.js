@@ -1,10 +1,18 @@
 import React from 'react'
 
-const Toolbar = ({toolBarChecked, onToolbarCheckBoxClick, onReadClick, onUnreadClick}) => (
+const Toolbar = ({
+  toolBarChecked,
+  onToolbarCheckBoxClick,
+  onReadClick,
+  onUnreadClick,
+  onDeleteClick,
+  unreadCount,
+  onAddLabelChange}) => (
+
   <div className="row toolbar">
   <div className="col-md-12">
     <p className="pull-right">
-      <span className="badge badge">2</span>
+      <span className="badge badge">{unreadCount}</span>
       unread messages
     </p>
 
@@ -26,7 +34,9 @@ const Toolbar = ({toolBarChecked, onToolbarCheckBoxClick, onReadClick, onUnreadC
       Mark As Unread
     </button>
 
-    <select className="form-control label-select">
+    <select
+      onChange={onAddLabelChange}
+      className="form-control label-select">
       <option>Apply label</option>
       <option value="dev">dev</option>
       <option value="personal">personal</option>
@@ -40,7 +50,9 @@ const Toolbar = ({toolBarChecked, onToolbarCheckBoxClick, onReadClick, onUnreadC
       <option value="gschool">gschool</option>
     </select>
 
-    <button className="btn btn-default">
+    <button
+      onClick={onDeleteClick}
+      className="btn btn-default">
       <i className="fa fa-trash-o"></i>
     </button>
   </div>

@@ -83,14 +83,40 @@ onReadClick = (e) => {
   })
 }
 
-onUnreadClick = (e) => {
+onAddLabelChange = (e) => {
   this.setState({
     ...this.state,
     messages: this.state.messages
     .map(message => {
-      if(message.selected) message.read = false
-      message.selected = false 
-      return message
+      if(message.selected && !message.labels.includes(e.target.value)){
+        message.labels.push(e.target.value)
+        return message
+      } else {
+        return message
+      }
+
+    })
+  })
+}
+
+onDeleteClick = (e) => {
+  this.setState({
+    ...this.state,
+    messages: this.state.messages
+    .filter(message => !message.selected),
+    toolBarChecked: false
+})
+}
+
+onUnreadCount = () => {
+
+  this.setState({
+    ...this.state,
+    messages: this.state.messages
+    .map(message => {
+      if(!message.read){
+        this.state.unreadCount ++
+      }
     })
   })
 }
@@ -145,8 +171,11 @@ onStarClick = (id) => {
           <Toolbar
             onReadClick={this.onReadClick}
             onUnreadClick={this.onUnreadClick}
+            onDeleteClick={this.onDeleteClick}
             toolBarChecked={this.state.toolBarChecked}
-            onToolbarCheckBoxClick={this.onToolbarCheckBoxClick}/>
+            onToolbarCheckBoxClick={this.onToolbarCheckBoxClick}
+            unreadCount={this.state.messages.filter(message => !message.read).length}
+            onAddLabelChange={this.onAddLabelChange}/>
         <MessageList
           messages={this.state.messages}
           checkBox={this.checkBox}
