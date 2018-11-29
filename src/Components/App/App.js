@@ -85,14 +85,26 @@ constructor(){
   })
 }
 
-
+onStarClick = (id) => {
+  this.setState({
+    ...this.state,
+    messages: this.state.messages
+    .map(message => {
+      if(message.id === id){
+        message.starred = !message.starred
+      } return message
+    })
+  })
+}
 
 
   render() {
     return (
       <div className="App">
         <h1>React Inbox</h1>
-        <MessageList messages={this.state.messages} checkBox={this.checkBox}/>
+        <MessageList messages={this.state.messages}
+          checkBox={this.checkBox}
+          onStarClick={this.onStarClick}/>
 
       </div>
     );
