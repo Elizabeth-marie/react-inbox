@@ -71,6 +71,30 @@ constructor(){
   }
 }
 
+onReadClick = (e) => {
+  this.setState({
+    ...this.state,
+    messages: this.state.messages
+    .map(message => {
+      if(message.selected) message.read = true
+      message.selected = false
+      return message
+    })
+  })
+}
+
+onUnreadClick = (e) => {
+  this.setState({
+    ...this.state,
+    messages: this.state.messages
+    .map(message => {
+      if(message.selected) message.read = false
+      message.selected = false 
+      return message
+    })
+  })
+}
+
 onToolbarCheckBoxClick = (e) => {
   this.setState({
     ...this.state,
@@ -119,6 +143,8 @@ onStarClick = (id) => {
       <div className="App">
         <h1>React Inbox</h1>
           <Toolbar
+            onReadClick={this.onReadClick}
+            onUnreadClick={this.onUnreadClick}
             toolBarChecked={this.state.toolBarChecked}
             onToolbarCheckBoxClick={this.onToolbarCheckBoxClick}/>
         <MessageList

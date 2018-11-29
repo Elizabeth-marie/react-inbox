@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Toolbar = ({toolBarChecked, onToolbarCheckBoxClick}) => (
+const Toolbar = ({toolBarChecked, onToolbarCheckBoxClick, onReadClick, onUnreadClick}) => (
   <div className="row toolbar">
   <div className="col-md-12">
     <p className="pull-right">
@@ -14,11 +14,15 @@ const Toolbar = ({toolBarChecked, onToolbarCheckBoxClick}) => (
       <i className={`fa fa-${toolBarChecked ? 'check-square-o' : 'square-o'}`}></i>
     </button>
 
-    <button className="btn btn-default">
+    <button
+      onClick={onReadClick}
+      className="btn btn-default">
       Mark As Read
     </button>
 
-    <button className="btn btn-default">
+    <button
+      onClick={onUnreadClick}
+      className="btn btn-default">
       Mark As Unread
     </button>
 
