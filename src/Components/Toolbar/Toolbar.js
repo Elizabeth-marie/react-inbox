@@ -7,7 +7,8 @@ const Toolbar = ({
   onUnreadClick,
   onDeleteClick,
   unreadCount,
-  onAddLabelChange}) => (
+  onAddLabelChange,
+  onRemoveLabelChange}) => (
 
   <div className="row toolbar">
   <div className="col-md-12">
@@ -43,7 +44,9 @@ const Toolbar = ({
       <option value="gschool">gschool</option>
     </select>
 
-    <select className="form-control label-select">
+    <select
+      onChange={onRemoveLabelChange}
+      className="form-control label-select">
       <option>Remove label</option>
       <option value="dev">dev</option>
       <option value="personal">personal</option>

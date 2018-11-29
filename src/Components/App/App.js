@@ -99,6 +99,21 @@ onAddLabelChange = (e) => {
   })
 }
 
+onRemoveLabelChange = (e) => {
+  this.setState({
+    ...this.state,
+    messages: this.state.messages
+    .map(message => {
+      if(message.selected && message.labels.includes(e.target.value)) {
+        message.labels.splice(message.labels.indexOf(e.target.value, 1))
+        return message
+      } else {
+        return message
+      }
+    })
+  })
+}
+
 onDeleteClick = (e) => {
   this.setState({
     ...this.state,
@@ -175,7 +190,8 @@ onStarClick = (id) => {
             toolBarChecked={this.state.toolBarChecked}
             onToolbarCheckBoxClick={this.onToolbarCheckBoxClick}
             unreadCount={this.state.messages.filter(message => !message.read).length}
-            onAddLabelChange={this.onAddLabelChange}/>
+            onAddLabelChange={this.onAddLabelChange}
+            onRemoveLabelChange={this.onRemoveLabelChange}/>
         <MessageList
           messages={this.state.messages}
           checkBox={this.checkBox}
