@@ -8,7 +8,7 @@ const Message = ({ message: { id, subject, read, starred, labels, selected }, ch
         <input
           checked={selected}
           type="checkbox"
-          onClick={() => checkBox(id)} />
+          onClick={checkBox(id)} />
       </div>
       <div className="col-xs-2">
         <i

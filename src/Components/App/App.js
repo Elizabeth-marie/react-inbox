@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
 import MessageList from '../Message-List/Message-List'
+import Toolbar from '../Toolbar/Toolbar'
 
 class App extends Component {
 constructor(){
   super()
   this.state = {
+    toolBarChecked: false,
     messages: [
   {
     "id": 1,
@@ -69,7 +71,22 @@ constructor(){
   }
 }
 
-  checkBox = (id) => {
+onToolbarCheckBoxClick = (e) => {
+  this.setState({
+    ...this.state,
+    toolBarChecked: !this.state.toolBarChecked,
+    messages: this.state.messages
+    .map(message => {
+      if(!this.state.toolBarChecked) {
+        message.selected = true
+      } else {
+        message.selected = false
+      } return message
+    })
+  })
+}
+
+  checkBox = (id) => (e) => {
     this.setState({
       ...this.state,
       messages: this.state.messages
@@ -97,15 +114,17 @@ onStarClick = (id) => {
   })
 }
 
-
   render() {
     return (
       <div className="App">
         <h1>React Inbox</h1>
-        <MessageList messages={this.state.messages}
+          <Toolbar
+            toolBarChecked={this.state.toolBarChecked}
+            onToolbarCheckBoxClick={this.onToolbarCheckBoxClick}/>
+        <MessageList
+          messages={this.state.messages}
           checkBox={this.checkBox}
           onStarClick={this.onStarClick}/>
-
       </div>
     );
   }
