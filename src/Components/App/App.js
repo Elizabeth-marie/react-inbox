@@ -65,6 +65,41 @@ onReadClick = async read => {
   })
 }
 
+onUnreadClick = async read => {
+  const ids = this.state.messages
+  .filter(message => message.selected)
+  .map(message => message.id)
+
+  const response = await fetch(`${API}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      command: "read",
+      read: false,
+      messageIds: ids
+    }),
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+  })
+    if(response.status === 200) {
+      const json = await response.json()
+      this.setState({
+        ...this.state,
+        messages: json
+      })
+    }
+  this.setState({
+    ...this.state,
+    messages: this.state.messages
+    .map(message => {
+      if(message.selected) message.read = true
+      message.selected = false
+      return message
+    })
+  })
+
+}
+
 onAddLabelChange = (e) => {
 
   //filter messageIds
