@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import './App.css';
 import MessageList from '../Message-List/Message-List'
 import Toolbar from '../Toolbar/Toolbar'
+import ComposeForm from '../Compose-Form/Compose-Form'
 
 class App extends Component {
 constructor(){
   super()
   this.state = {
     toolBarChecked: false,
+    composing: false,
     messages: [
   {
     "id": 1,
@@ -179,11 +181,23 @@ onStarClick = (id) => {
   })
 }
 
+
+
+onComposingClick = (e) => {
+  console.log('where you at?')
+  this.setState({
+    ...this.state,
+    composing: !this.state.composing
+  })
+}
+
   render() {
     return (
       <div className="App">
         <h1>React Inbox</h1>
           <Toolbar
+            toggleComposeForm={this.toggleComposeForm}
+            onComposingClick={this.onComposingClick}
             onReadClick={this.onReadClick}
             onUnreadClick={this.onUnreadClick}
             onDeleteClick={this.onDeleteClick}
@@ -196,6 +210,9 @@ onStarClick = (id) => {
           messages={this.state.messages}
           checkBox={this.checkBox}
           onStarClick={this.onStarClick}/>
+        <ComposeForm
+          composing={this.state.composing}/>
+
       </div>
     );
   }

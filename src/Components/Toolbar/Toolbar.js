@@ -1,6 +1,7 @@
 import React from 'react'
 
 const Toolbar = ({
+  onComposingClick,
   toolBarChecked,
   onToolbarCheckBoxClick,
   onReadClick,
@@ -16,6 +17,12 @@ const Toolbar = ({
       <span className="badge badge">{unreadCount}</span>
       unread messages
     </p>
+
+    <a
+      className="btn btn-danger"
+      onClick={onComposingClick}>
+      <i className="fa fa-plus"></i>
+    </a>
 
     <button
       onClick={onToolbarCheckBoxClick}
