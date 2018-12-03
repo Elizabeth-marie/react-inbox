@@ -12,8 +12,8 @@ const getMessages = async () => {
   return json
 }
 class App extends Component {
-constructor(props){
-  super(props)
+constructor(){
+  super()
   this.state = {
     toolBarChecked: false,
     composing: false,
@@ -100,38 +100,73 @@ onUnreadClick = async read => {
 
 }
 
-onAddLabelChange = (e) => {
+onAddLabelChange = async (e) => {
+  const ids = this.state.messages
+  .filter(message => message.selected)
+  .map(message => message.id)
 
-  //filter messageIds
-  // const filteredIds = this.state.messages.filter(message => message.selected).map(message => message.id)
-  //plug in filteredIds to the patch
-  //issue PATCH
+  const response = await fetch(`${API}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      command: "addLabel",
+      label: e.target.value,
+      messageIds: ids
+    }),
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+  })
+    if(response.status === 200) {
+      const json = await response.json()
+      this.setState({
+        ...this.state,
+        messages: json
+      })
+    }
   this.setState({
     ...this.state,
     messages: this.state.messages
     .map(message => {
-      if(message.selected && !message.labels.includes(e.target.value)){
+      if(message.selected && !message.labels.includes(e.target.value)) {
         message.labels.push(e.target.value)
-        return message
-      } else {
-        return message
       }
-
+      return message
     })
   })
-}
+  }
 
-onRemoveLabelChange = (e) => {
+
+onRemoveLabelChange = async (e) => {
+  const ids = this.state.messages
+  .filter(message => message.selected)
+  .map(message => message.id)
+
+  const response = await fetch(`${API}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      command: "removeLabel",
+      label: e.target.value,
+      messageIds: ids
+    }),
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+  })
+    if(response.status === 200) {
+      const json = await response.json()
+      this.setState({
+        ...this.state,
+        messages: json
+      })
+    }
   this.setState({
     ...this.state,
     messages: this.state.messages
     .map(message => {
-      if(message.selected && message.labels.includes(e.target.value)) {
-        message.labels.splice(message.labels.indexOf(e.target.value, 1))
-        return message
-      } else {
-        return message
+      if(message.selected && !message.labels.includes(e.target.value)) {
+        message.labels.push(e.target.value)
       }
+      return message
     })
   })
 }
@@ -162,8 +197,6 @@ onDeleteClick = async () => {
       })
     }
   }
-
-
 
 onUnreadCount = () => {
 
