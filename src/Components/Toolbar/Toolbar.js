@@ -1,4 +1,5 @@
 import React from 'react'
+// import ComposeForm from '../Compose-Form/Compose-Form'
 
 const Toolbar = ({
   onComposingClick,

@@ -42,6 +42,11 @@ onReadClick = (e) => {
 }
 
 onAddLabelChange = (e) => {
+
+  //filter messageIds
+  // const filteredIds = this.state.messages.filter(message => message.selected).map(message => message.id)
+  //plug in filteredIds to the patch
+  //issue PATCH
   this.setState({
     ...this.state,
     messages: this.state.messages
@@ -72,14 +77,56 @@ onRemoveLabelChange = (e) => {
   })
 }
 
-onDeleteClick = (e) => {
-  this.setState({
-    ...this.state,
-    messages: this.state.messages
-    .filter(message => !message.selected),
-    toolBarChecked: false
-})
-}
+// async addMessage(message) {
+//   console.log('addMessage', message)
+//   //do POST
+//   const response = await fetch(`${API}`, {
+//     method: 'POST',
+//     headers: {
+//       "Content-Type": "application/json; charset=utf-8"
+//     },
+//     body: JSON.stringify(message),
+//
+//   })
+//   if(response.status === 200) {
+//     const json = await response.json()
+//     console.log("POST", json)
+//
+//     this.setState({ messages: [...this.state.messages, json]})
+//   }
+//   else {
+//     console.error("Could not post", response.statusText)
+//   }
+//
+// }
+
+onDeleteClick = async () => {
+  const ids = this.state.messages
+  .filter(message => message.selected)
+  .map(message => message.id)
+
+  const response = await fetch(`${API}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      command: "delete",
+      messageIds: ids
+    }),
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+    })
+
+    if(response.status === 200) {
+      const json = await response.json()
+      this.setState({
+        ...this.state,
+        messages: json
+
+      })
+    }
+  }
+
+
 
 onUnreadCount = () => {
 
@@ -142,9 +189,31 @@ onStarClick = (id) => {
 onComposingClick = (e) => {
   console.log('where you at?')
   this.setState({
-    ...this.state,
     composing: !this.state.composing
   })
+}
+
+async addMessage(message) {
+  console.log('addMessage', message)
+  //do POST
+  const response = await fetch(`${API}`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    body: JSON.stringify(message),
+
+  })
+  if(response.status === 200) {
+    const json = await response.json()
+    console.log("POST", json)
+
+    this.setState({ messages: [...this.state.messages, json]})
+  }
+  else {
+    console.error("Could not post", response.statusText)
+  }
+
 }
 
   render() {
@@ -152,7 +221,6 @@ onComposingClick = (e) => {
       <div className="App">
         <h1>React Inbox</h1>
           <Toolbar
-            toggleComposeForm={this.toggleComposeForm}
             onComposingClick={this.onComposingClick}
             onReadClick={this.onReadClick}
             onUnreadClick={this.onUnreadClick}
@@ -167,7 +235,7 @@ onComposingClick = (e) => {
           checkBox={this.checkBox}
           onStarClick={this.onStarClick}/>
         <ComposeForm
-          composing={this.state.composing}/>
+          composing={this.state.composing} addMessage={this.addMessage.bind(this)}/>
 
       </div>
     );
