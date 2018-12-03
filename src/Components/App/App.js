@@ -29,7 +29,31 @@ async componentDidMount(){
   this.setState({messages: json})
 }
 
-onReadClick = (e) => {
+
+
+onReadClick = async read => {
+  const ids = this.state.messages
+  .filter(message => message.selected)
+  .map(message => message.id)
+
+  const response = await fetch(`${API}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      command: "read",
+      read: true,
+      messageIds: ids
+    }),
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+  })
+    if(response.status === 200) {
+      const json = await response.json()
+      this.setState({
+        ...this.state,
+        messages: json
+      })
+    }
   this.setState({
     ...this.state,
     messages: this.state.messages
@@ -77,28 +101,6 @@ onRemoveLabelChange = (e) => {
   })
 }
 
-// async addMessage(message) {
-//   console.log('addMessage', message)
-//   //do POST
-//   const response = await fetch(`${API}`, {
-//     method: 'POST',
-//     headers: {
-//       "Content-Type": "application/json; charset=utf-8"
-//     },
-//     body: JSON.stringify(message),
-//
-//   })
-//   if(response.status === 200) {
-//     const json = await response.json()
-//     console.log("POST", json)
-//
-//     this.setState({ messages: [...this.state.messages, json]})
-//   }
-//   else {
-//     console.error("Could not post", response.statusText)
-//   }
-//
-// }
 
 onDeleteClick = async () => {
   const ids = this.state.messages
