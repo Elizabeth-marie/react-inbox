@@ -4,7 +4,11 @@ import React from 'react'
 const Toolbar = ({
   onComposingClick,
   toolBarChecked,
-  onToolbarCheckBoxClick,
+
+  onSelectAllClick,
+  selected,
+  unselected,
+
   onReadClick,
   onUnreadClick,
   onDeleteClick,
@@ -26,10 +30,14 @@ const Toolbar = ({
     </a>
 
     <button
-      onClick={onToolbarCheckBoxClick}
-      className="btn btn-default">
-      <i className={`fa fa-${toolBarChecked ? 'check-square-o' : 'square-o'}`}></i>
-    </button>
+      className="btn btn-default"
+      onClick={() => onSelectAllClick(selected)}>
+          <i className={`fa ${
+                      selected === 0 ? "fa-square-o"
+                  : unselected === 0 ? "fa-check-square-o"
+                  :                    "fa-minus-square-o" }`}>
+            </i>
+          </button>
 
     <button
       onClick={onReadClick}

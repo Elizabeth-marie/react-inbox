@@ -211,20 +211,32 @@ onUnreadCount = () => {
   })
 }
 
-onToolbarCheckBoxClick = (e) => {
-  this.setState({
-    ...this.state,
-    toolBarChecked: !this.state.toolBarChecked,
-    messages: this.state.messages
-    .map(message => {
-      if(!this.state.toolBarChecked) {
-        message.selected = true
-      } else {
-        message.selected = false
-      } return message
+// onToolbarCheckBoxClick = (e) => {
+//   this.setState({
+//     ...this.state,
+//     toolBarChecked: !this.state.toolBarChecked,
+//     messages: this.state.messages
+//     .map(message => {
+//       if(!this.state.toolBarChecked) {
+//         message.selected = true
+//       } else {
+//         message.selected = false
+//       } return message
+//     })
+//   })
+// }
+
+onSelectAllClick = selected => {
+    this.setState({
+      ...this.state,
+      messages: this.state.messages.map(message => {
+        selected < this.state.messages.length
+        ? message.selected = true
+        : delete message.selected
+        return message
+      })
     })
-  })
-}
+  }
 
   checkBox = (id) => (e) => {
     this.setState({
@@ -296,7 +308,12 @@ async addMessage(message) {
             onUnreadClick={this.onUnreadClick}
             onDeleteClick={this.onDeleteClick}
             toolBarChecked={this.state.toolBarChecked}
-            onToolbarCheckBoxClick={this.onToolbarCheckBoxClick}
+
+            onSelectAllClick={ this.onSelectAllClick }
+         selected={ this.state.messages.filter(message => message.selected).length }
+         unselected={ this.state.messages.filter(message => !message.selected).length }
+         
+            // onToolbarCheckBoxClick={this.onToolbarCheckBoxClick}
             unreadCount={this.state.messages.filter(message => !message.read).length}
             onAddLabelChange={this.onAddLabelChange}
             onRemoveLabelChange={this.onRemoveLabelChange}/>
