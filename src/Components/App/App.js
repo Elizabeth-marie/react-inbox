@@ -211,21 +211,6 @@ onUnreadCount = () => {
   })
 }
 
-// onToolbarCheckBoxClick = (e) => {
-//   this.setState({
-//     ...this.state,
-//     toolBarChecked: !this.state.toolBarChecked,
-//     messages: this.state.messages
-//     .map(message => {
-//       if(!this.state.toolBarChecked) {
-//         message.selected = true
-//       } else {
-//         message.selected = false
-//       } return message
-//     })
-//   })
-// }
-
 onSelectAllClick = selected => {
     this.setState({
       ...this.state,
@@ -254,30 +239,41 @@ onSelectAllClick = selected => {
   })
 }
 
-onStarClick = (id) => {
-  this.setState({
-    ...this.state,
-    messages: this.state.messages
-    .map(message => {
-      if(message.id === id){
-        message.starred = !message.starred
-      } return message
-    })
+onStarClick = async id => {
+
+  const response = await fetch(`${API}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      command: "star",
+      messageIds: [id]
+    }),
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    }
   })
+  if(response.status === 200){
+    const json = await response.json()
+    this.setState({
+      ...this.state,
+      messages: this.state.messages
+      .map(message => {
+        if(message.id === id){
+          message.starred = !message.starred
+        }
+        return message
+      })
+    })
+  }
 }
 
 
-
 onComposingClick = (e) => {
-  console.log('where you at?')
   this.setState({
     composing: !this.state.composing
   })
 }
 
 async addMessage(message) {
-  console.log('addMessage', message)
-  //do POST
   const response = await fetch(`${API}`, {
     method: 'POST',
     headers: {
@@ -302,6 +298,7 @@ async addMessage(message) {
     return (
       <div className="App">
         <h1>React Inbox</h1>
+
           <Toolbar
             onComposingClick={this.onComposingClick}
             onReadClick={this.onReadClick}
@@ -310,19 +307,17 @@ async addMessage(message) {
             toolBarChecked={this.state.toolBarChecked}
 
             onSelectAllClick={ this.onSelectAllClick }
-         selected={ this.state.messages.filter(message => message.selected).length }
-         unselected={ this.state.messages.filter(message => !message.selected).length }
-         
-            // onToolbarCheckBoxClick={this.onToolbarCheckBoxClick}
+            selected={ this.state.messages.filter(message => message.selected).length }
+            unselected={ this.state.messages.filter(message => !message.selected).length }
             unreadCount={this.state.messages.filter(message => !message.read).length}
             onAddLabelChange={this.onAddLabelChange}
             onRemoveLabelChange={this.onRemoveLabelChange}/>
-        <MessageList
-          messages={this.state.messages}
-          checkBox={this.checkBox}
-          onStarClick={this.onStarClick}/>
-        <ComposeForm
-          composing={this.state.composing} addMessage={this.addMessage.bind(this)}/>
+          <MessageList
+            messages={this.state.messages}
+            checkBox={this.checkBox}
+            onStarClick={this.onStarClick}/>
+          <ComposeForm
+            composing={this.state.composing} addMessage={this.addMessage.bind(this)}/>
 
       </div>
     );
