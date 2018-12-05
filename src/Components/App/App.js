@@ -30,8 +30,8 @@ async componentDidMount(){
 }
 
 
-
 onReadClick = async read => {
+
   const ids = this.state.messages
   .filter(message => message.selected)
   .map(message => message.id)
